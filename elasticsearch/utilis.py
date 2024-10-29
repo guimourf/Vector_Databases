@@ -5,7 +5,6 @@ import numpy as np
 import torch
 import torch.nn as nn
 from transformers import AutoTokenizer, AutoModelForMaskedLM, AutoModel
-from sentence_transformers import SentenceTransformer
 
 from sklearn.metrics.pairwise import cosine_similarity
 from tqdm import tqdm
@@ -20,11 +19,21 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 # Inicializando o modelo BERT e o tokenizer
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 tokenizer = AutoTokenizer.from_pretrained("raquelsilveira/legalbertpt_fp")
-model = SentenceTransformer("raquelsilveira/legalbertpt_fp")
+model = AutoModel.from_pretrained("raquelsilveira/legalbertpt_fp")
 
 # Função para gerar embeddings
 def gerar_embedding(texto):
-    return model.encode(texto)
+    inputs = tokenizer(
+        texto, 
+        return_tensors="pt", 
+        padding=True, 
+        truncation=True, 
+        max_length=512
+    ).to(device)
+    with torch.no_grad():
+        outputs = model(**inputs)
+    embeddings = outputs.last_hidden_state.mean(dim=1).squeeze().cpu().numpy()
+    return embeddings
 
 
 
