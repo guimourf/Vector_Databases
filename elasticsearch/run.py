@@ -8,7 +8,7 @@ from utilis import gerar_embedding, gerar_indice, indexar_documentos, atualizar_
 
 es = Elasticsearch(
     ['https://localhost:9200'],
-    basic_auth=('elastic', '19112023'),
+    basic_auth=('elastic', 'password'),
     verify_certs=False  # Desabilitar a verificação do certificado para simplificar
 )
 
