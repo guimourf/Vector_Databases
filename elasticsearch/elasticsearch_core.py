@@ -9,8 +9,6 @@ from transformers import AutoTokenizer, AutoModelForMaskedLM, AutoModel
 from sklearn.metrics.pairwise import cosine_similarity
 from tqdm import tqdm
 
-
-
 # Inicializando o modelo BERT e o tokenizer
 
 
@@ -21,7 +19,8 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 tokenizer = AutoTokenizer.from_pretrained("raquelsilveira/legalbertpt_fp")
 model = AutoModel.from_pretrained("raquelsilveira/legalbertpt_fp")
 
-# Função para gerar embeddings
+
+# Função para gerar o embedding de um texto
 def gerar_embedding(texto):
     inputs = tokenizer(
         texto, 
@@ -36,12 +35,11 @@ def gerar_embedding(texto):
     return embeddings
 
 
-
 # Configuração do índice para Elasticsearch (dense vector com 768 dimensões)
 def gerar_indice(es, indice):
     if not es.indices.exists(index=indice):
         print("Índice não encontrado.")
-        print("Criand um novo índice!")
+        print("Criando um novo índice!")
         es.indices.create(
             index=indice,
             body={

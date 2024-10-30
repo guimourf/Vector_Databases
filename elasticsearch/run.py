@@ -4,20 +4,13 @@ import pandas as pd
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-from utilis import gerar_embedding, gerar_indice, indexar_documentos, atualizar_rel_jur, buscar_documentos
+from elasticsearch_core import gerar_embedding, gerar_indice, indexar_documentos, atualizar_rel_jur, buscar_documentos
 
 es = Elasticsearch(
     ['https://localhost:9200'],
     basic_auth=('elastic', '19112023'),
     verify_certs=False  # Desabilitar a verificação do certificado para simplificar
 )
-
-# Testar a conexão
-if es.ping():
-    print("Conectado ao Elasticsearch!")
-else:
-    print("Falha na conexão.")
-
 # Definir o nome do índice
 index_name = 'documentos_juridicos'
 
